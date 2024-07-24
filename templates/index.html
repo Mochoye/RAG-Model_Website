@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Upload PDF</title>
+    <style>
+      #loading {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Upload a PDF</h1>
+    <form method="POST" action="/upload" enctype="multipart/form-data" onsubmit="showLoading()">
+      <input type="file" name="file" accept="application/pdf">
+      <input type="submit" value="Upload">
+    </form>
+    <div id="loading">
+      <img src="{{ url_for('static', filename='loading.gif') }}" alt="Loading...">
+      <p>Loading, please wait...</p>
+    </div>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    <script>
+      function showLoading() {
+        document.getElementById('loading').style.display = 'block';
+      }
+    </script>
+    
+    <br>
+    <a href="{{ url_for('query') }}">Go to Query Page</a>
+  </body>
+</html>

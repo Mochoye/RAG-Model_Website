@@ -1,0 +1,19 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+#loading {
+    font-size: 1.2em;
+    color: red;
+}
+
+#response {
+    margin-top: 20px;
+    font-size: 1.2em;
+    color: green;
+}
