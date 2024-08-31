@@ -61,16 +61,27 @@ def split_text(documents: list[Document]):
 
 
 def save_to_chroma(chunks: list[Document]):
-    # Clear out the database first.
+    # Check if the Chroma vector store exists
     if os.path.exists(CHROMA_PATH):
-        shutil.rmtree(CHROMA_PATH)
+        # Load the existing database
+        db = Chroma(persist_directory=CHROMA_PATH, embedding_function=OpenAIEmbeddings())
+    else:
+        # Create a new database if it doesn't exist
+        db = Chroma.from_documents(chunks, OpenAIEmbeddings(), persist_directory=CHROMA_PATH)
 
-    # Create a new DB from the documents.
-    db = Chroma.from_documents(
-        chunks, OpenAIEmbeddings(), persist_directory=CHROMA_PATH
-    )
+    # Define the maximum batch size allowed
+    max_batch_size = 5460
+
+    # Split the chunks into smaller batches and add them to the database
+    for i in range(0, len(chunks), max_batch_size):
+        batch = chunks[i:i + max_batch_size]
+        db.add_documents(batch)
+
+    # Persist the database with the new chunks included
     db.persist()
-    print(f"Saved {len(chunks)} chunks to {CHROMA_PATH}.")
+    print(f"Saved {len(chunks)} new chunks to {CHROMA_PATH}.")
+
+
 
 
 if __name__ == "__main__":
