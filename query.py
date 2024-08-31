@@ -3,6 +3,11 @@ from langchain_community.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings
 from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
+from dotenv import load_dotenv
+import os
+
+# Load environment variables. Assumes that project contains .env file with API keys
+load_dotenv()
 
 CHROMA_PATH = "chroma"
 
@@ -17,8 +22,8 @@ Answer the question based on the above context: {question}
 """
 
 def main():
-    # Create CLI.
-    openai_api_key = "OPENAI_API_KEY"
+    # Retrieve OpenAI API key from the environment variable
+    openai_api_key = os.getenv("OPENAI_API_KEY")
     embedding_function = OpenAIEmbeddings(openai_api_key=openai_api_key)
 
     parser = argparse.ArgumentParser()
